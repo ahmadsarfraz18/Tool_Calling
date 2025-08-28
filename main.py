@@ -42,26 +42,29 @@ def usd_to_pkr(query: str) -> str:
 def get_current_weather(city: str) -> str:
     return f"The current weather in {city} is sunny with a temperature of 25°C. "
 
-# Create the base agent with tools
+# Create the base agent with tools and model settings
 base_agent= Agent(
     name= "CurrencyConverterAgent",
     instructions= "Yor are a helpful assistant that helps the user with their queries and also use the tools if needed. ",
     tools= [calculator, usd_to_pkr, get_current_weather],
+    model_settings= ModelSettings(tool_choice= "required")
 )
 
 # Clone the base agent to create a creative agent
-creative_agent= base_agent.clone(
-    name= "Creative Agent",
-    instructions= "You are a creative agent that can think outside the box and use the tools creatively to help the user with their queries. ",
+# creative_agent= base_agent.clone(
+#     name= "Creative Agent",
+#     instructions= "You are a creative agent that can think outside the box and use the tools creatively to help the user with their queries. ",
 
-)
+# )
 
-# Run the agent with a query
+# Run the agent with a query and also used 4 different queries to test the tools with model settings. ["auto", "required", "none"]
 result= Runner.run_sync(
-    creative_agent,
-    # "If I have 100 USD, how much PKR will I get?",
+    base_agent,
+    # creative_agent,
+    # "Hi! How are you today?",
+    "If I have 100 USD, how much PKR will I get?",
     # "what is the current weather of New York?",
-    "what is 15 multiplied by 3?",
+    # "what is 15 multiplied by 3?",
     run_config= config
 )
 # Print the final output
